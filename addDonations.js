@@ -86,7 +86,7 @@ function formatDonorName(nameValue)
 function currencyFormatter()
 {
   const inputField = document.getElementById('amount');
-  const formattedInputValue = formatCurrency(inputField.value);
+  const formattedInputValue = formatCurrency(inputField.value,2);
   let checkIfNum = Number(formattedInputValue);
   if (isNaN(checkIfNum))
   {
@@ -98,11 +98,11 @@ function currencyFormatter()
   }
 }
 
-function formatCurrency(currencyValue)
+function formatCurrency(currencyValue, decimalPlace)
 {
     let currencyOutput = currencyValue.replace(/[^0-9.]/g, '');
-    let formattedInputValue = Number.parseFloat(currencyOutput).toFixed(2);
-    return formattedInputValue.toString();
+    var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (decimalPlace || -1) + '})?');
+    return currencyOutput.toString().match(re)[0];
 }
 
 // formatting phone number [2 functions]
