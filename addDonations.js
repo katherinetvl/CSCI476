@@ -46,7 +46,7 @@ function addMoreDonations(event){
         <label htmlFor="date">Date</label>
         <input type='date' name="date"/>
         <label htmlFor="donorName">Donor Name</label>
-        <input type='text' name="donorName"/>
+        <input type='text' name="donorName" onBlur={donorNameFormatter} id="donorName"/>
         <label htmlFor="amount">Amount  $</label>
         <input type='text' name="amount" onBlur={currencyFormatter} id="amount" />
         <label htmlFor="category">Category</label>
@@ -67,7 +67,22 @@ function addMoreDonations(event){
     console.log("Complete Rendered HTML for additional donations: " + donationHTML);
     ReactDOM.render(donationHTML, document.getElementById('addDonationsHere'));
 }
-// formatting amount to just have two decimal places
+
+// formatting donor name to be alpha only [2 functions]
+function donorNameFormatter()
+{
+    const inputField = document.getElementById('donorName');
+    const formattedInputValue = formatDonorName(inputField.value);
+    inputField.value = formattedInputValue;
+}
+
+function formatDonorName(nameValue)
+{
+    let formattedInputValue = nameValue.replace(/^[a-zA-Z]+$/g, '');
+    return formattedInputValue;
+}
+
+// formatting amount to just have two decimal places [2 functions]
 function currencyFormatter()
 {
   const inputField = document.getElementById('amount');
@@ -90,7 +105,7 @@ function formatCurrency(currencyValue)
     return formattedInputValue.toString();
 }
 
-// two formatting phone number functions are as follows
+// formatting phone number [2 functions]
 function phoneNumberFormatter() // https://tomduffytech.com/how-to-format-phone-number-in-javascript/
 {
   const inputField = document.getElementById('phoneNumber');
