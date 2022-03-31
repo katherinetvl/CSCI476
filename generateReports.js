@@ -102,6 +102,16 @@ function calculateTimeframe() {
     el.style.animation = " ";
 }
 
+function allowDateRangeSelection()
+{
+    document.getElementById('customRange').style.display = "block";
+}
+
+function calculateCustomTimeframe()
+{
+    console.log('User has selected Custom Date Range.');
+}
+
 function writeReport(event) {
     event.preventDefault();
     console.log("GENERATING REPORTS");
@@ -115,36 +125,40 @@ function writeReport(event) {
         console.log('User selected donationType1');
         document.getElementById('viewDonationType1').style.display = "block";
         document.getElementById('generatePDF').style.display = "block";
+
+        document.getElementById('viewDonationType2').style.display = "none";
+        document.getElementById('viewExpense').style.display = "none";
+        document.getElementById('undefinedReport').style.display = "none";
     }
     else if(donationReport2.checked)
     {
         console.log('User selected donationType2');
         document.getElementById('viewDonationType2').style.display = "block";
         document.getElementById('generatePDF').style.display = "block";
+
+        document.getElementById('viewDonationType1').style.display = "none";
+        document.getElementById('viewExpense').style.display = "none";
+        document.getElementById('undefinedReport').style.display = "none";
     }
     else if(expense.checked)
     {
         console.log('User selected expense');
         document.getElementById('viewExpense').style.display = "block";
         document.getElementById('generatePDF').style.display = "block";
+
+        document.getElementById('viewDonationType1').style.display = "none";
+        document.getElementById('viewDonationType2').style.display = "none";
+        document.getElementById('undefinedReport').style.display = "none";
     }
     else
     {
         console.log('User did not select a donation or expense report');
-    }
+        document.getElementById('undefinedReport').style.display = "block";
 
-    /*
-    fs.appendFile('mynewfile1.txt', 'Hello content!', function (err) {
-        if (err) throw err;
-        console.log('Saved!');
-    });
-    */
-    /*
-    createFile('./reports/fileName', 'my content\n', function (err) {
-        // file either already exists or is now created (including non existing directories)
-        alert("Error while creating file:" + err);
-    });
-    */
+        document.getElementById('viewDonationType1').style.display = "none";
+        document.getElementById('viewDonationType2').style.display = "none"; 
+        document.getElementById('viewExpense').style.display = "none"; 
+    }
 }
 
 function savePDF(){
@@ -228,9 +242,16 @@ function GenerateReports() {
                         <label htmlFor="yearly">Yearly</label>
                     </div>
                     <div id="lastDiv">
-                        <input type='radio' name="time" value="Custom" className="timeframe" id="custom" onClick={calculateTimeframe} />
+                        <input type='radio' name="time" value="Custom" className="timeframe" id="custom" onClick={allowDateRangeSelection} />
                         <label htmlFor="custom">Custom</label>
                     </div>
+                    <div id="customRange" style={{display:"none"}}>
+                        <input type='date' name="time" value="Custom" className="timeframe" id="customStart" />
+                        <label htmlFor="custom">Start Time</label>
+                        <input type='date' name="time" value="Custom" className="timeframe" id="customEnd" onClick={calculateCustomTimeframe} />
+                        <label htmlFor="custom">End Time</label>
+                    </div>
+
                     <p>Desired Report Type</p>
                     <div>
                         <input type='radio' name="type" id="donationType1" />
@@ -292,6 +313,9 @@ function GenerateReports() {
             </div>
             <div id = "generatePDF" style={{display:"none"}}>
                 <button id="cmd" onClick={savePDF}>Generate PDF</button>
+            </div>
+            <div id = "undefinedReport" style={{display:"none"}}>
+                <p>Please select a Desired Report Type</p>
             </div>
         </div>
     );
